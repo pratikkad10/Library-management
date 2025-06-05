@@ -279,40 +279,48 @@ export const getBorrowedBooks= async (req,res)=>{
 }
 
 export const returnBook = async (req,res)=>{
-    const bookId=req.params.bookId;
+    const bookId=req.params.id;
     try {
-        const book = await Borrowing.findOne({ book_id: bookId, status: "borrowed" });
+        const book = await Borrowing.findOne({bookId:bookId});
         if(!book){
             return res.status(400).json({
-        success: false,
-        message: "Book is not available!",
-        });
+                success: false,
+                message: "Book is not borrowed!",
+            });
         }
 
-        book.status = "returned"
-        book.returnDate=new Date();
-        book.save();
+        if(book.returnStatus === "returned"){
+            return res.status(400).json({
+                success: false,
+                message: "Book is already returned!",
+            });
+        }
 
+        // Update the book's available copies count
         await booksModel.findByIdAndUpdate(
-        bookId,
-        { $inc: { available_copies: 1 } },      
-        { new: true });
+            bookId,
+            { $inc: { available_copies: 1 } },
+            { new: true }
+        );
+
+        book.borrowStatus = "not requested";
+        book.returnStatus = "requested";
+        await book.save();
 
         res.status(200).json({
-        success: true,
-        message: "Book returned successfully!",
-        book
+            success: true,
+            message: "Book returned request sent successfully!",
+            book
         });
     } catch (error) {
         console.log(error);
         res.status(500).json({
-        success: false,
-        message: "Issue in returning book!",
-        error: error.message,
+            success: false,
+            message: "Issue in returning book!",
+            error: error.message
         });
     }
 };
-
 
 export const borrowHistory= async (req,res)=>{
     try {
