@@ -225,8 +225,8 @@ export const borrowBook = async (req, res)=>{
 
         const borrowedBook = await Borrowing.create({
             userId, 
-            bookId, 
-            dueDate
+            bookId
+            // dueDate  due date can be set after request accepted by librarian
         });
 
         await booksModel.findByIdAndUpdate(
@@ -339,35 +339,21 @@ export const borrowHistory= async (req,res)=>{
     }
 };
 
+//search books by title is incomplete
 export const searchBooks = async (req, res) => {
-  const search = req.body.search; 
+  const { searchKey } = req.body;
 
   try {
-    const searchCondition = search
-      ? {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { author: { $regex: search, $options: "i" } },
-            { publisher: { $regex: search, $options: "i" } },
-            { category: { $regex: search, $options: "i" } },
-            { tags: { $regex: search, $options: "i" } }
-          ]
-        }
-      : {}; 
+      const books = await booksModel.find({
+          title: { $regex: searchKey, $options: 'i' },
+      });
 
-    const books = await booksModel.find(searchCondition);
+      if (books.length === 0) {
+          return res.status(404).json({ message: 'No books found with the given title.' });
+      }
 
-    res.status(200).json({
-      success: true,
-      message: "Books retrieved successfully!",
-      books
-    });
+      res.status(200).json({ books });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Error in searching books.",
-      error: error.message
-    });
+      res.status(500).json({ message: 'Error searching for books.', error });
   }
 };
