@@ -71,8 +71,11 @@ const isStaff = async (req, res, next)=>{
 }
 
 const isAdmin = async (req, res, next)=>{
+    console.log("isAdmin middleware");
+    
     try {
         const {user} = req;
+        console.log(user);
         if(user.role !== "admin"){
             return res.status(400).json({
                 success:false,
