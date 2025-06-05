@@ -17,16 +17,20 @@ const borrowingSchema = new mongoose.Schema(
       default: Date.now,
     },
     dueDate: {
-      type: Date,
-      required: true,
+      type: Date
     },
     returnDate: {
       type: Date,
     },
-    status: {
+    borrowStatus: {
       type: String,
-      enum: ["borrowed", "returned"],
-      default: "borrowed",
+      enum: ["borrowed","requested", "not requested"],
+      default: "requested",
+    },
+    returnStatus: {
+      type: String,
+      enum: ["returned", "requested", "not requested"],
+      default: "not requested",
     },
     fine: {
       type: Number,
