@@ -37,14 +37,16 @@ bookRoutes.delete('/:id', deleteBookById);
 // POST /borrow: To borrow a book 
 bookRoutes.post('/borrow/:bookId',isLoggedIn, borrowBook); 
 
-// GET /borrow: To view all borrowed books by a user.
-bookRoutes.get('/borrow', getBorrowedBooks);   
+// // GET /borrow: To view all borrowed books by a user.
+// bookRoutes.get('/borrow', getBorrowedBooks);   
 
-// POST /return: To return a borrowed book.
-bookRoutes.put('/return', returnBook);
+
 
 // GET /borrow/history: To view the borrowing history.
-bookRoutes.get('/borrow/history', borrowHistory);
+// bookRoutes.get('/borrow/history', borrowHistory);
+
+//RETURN BOOK
+bookRoutes.post('/return/:id',isLoggedIn, returnBook);
 
 // GET /books/search
 bookRoutes.get('/search', searchBooks);
