@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-custom-dark-0: #000000;
+  --color-custom-dark-1: #0d0d0d;
+  --color-custom-dark-2: #1a1a1a;
+  --color-custom-dark-3: #181818;
+  --color-custom-dark-4: #212121;
+  --color-custom-dark-5: #303030;
+  --color-custom-dark-6: #424242;
+  --color-custom-dark-7: #676767;
+  --color-custom-dark-8: #666666;
+  
+}
+
